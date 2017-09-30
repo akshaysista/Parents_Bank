@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -15,19 +16,19 @@ namespace Parents_Bank.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BankAccounts
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.BankAccounts.ToList());
+            return View(await db.BankAccounts.ToListAsync());
         }
 
         // GET: BankAccounts/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = db.BankAccounts.Find(id);
+            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -46,12 +47,12 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,Balance,InterestRate")] BankAccount bankAccount)
+        public async Task<ActionResult> Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,Balance,InterestRate")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
                 db.BankAccounts.Add(bankAccount);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -59,13 +60,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: BankAccounts/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = db.BankAccounts.Find(id);
+            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -78,25 +79,25 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,Balance,InterestRate")] BankAccount bankAccount)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,Balance,InterestRate")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(bankAccount).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = db.BankAccounts.Find(id);
+            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -107,11 +108,11 @@ namespace Parents_Bank.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            BankAccount bankAccount = db.BankAccounts.Find(id);
+            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
             db.BankAccounts.Remove(bankAccount);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

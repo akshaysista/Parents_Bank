@@ -17,32 +17,31 @@ namespace Parents_Bank.Models
         public string RecipientEmail { get; set; }
         [Required]
         public string Name { get; set; }//Name of child
-        private DateTime _openDate;
-        public DateTime OpenDate { get;}
+        public DateTime OpenDate { get; set; }
         public decimal Balance { get; set; }
         
         public decimal InterestRate { get; set; }
         public virtual List<Transaction> Transactions { get; set; }
         public virtual List<WishListItem> WishListItems { get; set; }
 
-        public ValidationResult ValidateInterestRate(BankAccount bankAccount, ValidationContext context)
+        public static ValidationResult ValidateInterestRate(BankAccount bankAccount, ValidationContext context)
         {
             if (bankAccount ==null)
             {
                 return ValidationResult.Success;
             }
-            if (InterestRate <=0)
+            if (bankAccount.InterestRate <=0)
             {
                 return new ValidationResult("Interest rate cannot be 0% or below");
             }
-            if (InterestRate > 100)
+            if (bankAccount.InterestRate > 100)
             {
                 return new ValidationResult("Interest rate cannot be 100% or above");
             }
             return ValidationResult.Success;
         }
 
-        public ValidationResult ValidateEmailAddresses(BankAccount bankAccount ,ValidationContext context)
+        public static ValidationResult ValidateEmailAddresses(BankAccount bankAccount ,ValidationContext context)
         {
             if (bankAccount==null)
             {

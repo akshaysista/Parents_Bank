@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -15,20 +16,20 @@ namespace Parents_Bank.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: WishListItems
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var wishListItems = db.WishListItems.Include(w => w.Account);
-            return View(wishListItems.ToList());
+            return View(await wishListItems.ToListAsync());
         }
 
         // GET: WishListItems/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            WishListItem wishListItem = db.WishListItems.Find(id);
+            WishListItem wishListItem = await db.WishListItems.FindAsync(id);
             if (wishListItem == null)
             {
                 return HttpNotFound();
@@ -48,12 +49,12 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,AccountId,DateAdded,Cost,Description,WebAddress,PurchasedTag")] WishListItem wishListItem)
+        public async Task<ActionResult> Create([Bind(Include = "Id,AccountId,DateAdded,Cost,Description,WebAddress,PurchasedTag")] WishListItem wishListItem)
         {
             if (ModelState.IsValid)
             {
                 db.WishListItems.Add(wishListItem);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -62,13 +63,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: WishListItems/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            WishListItem wishListItem = db.WishListItems.Find(id);
+            WishListItem wishListItem = await db.WishListItems.FindAsync(id);
             if (wishListItem == null)
             {
                 return HttpNotFound();
@@ -82,12 +83,12 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,AccountId,DateAdded,Cost,Description,WebAddress,PurchasedTag")] WishListItem wishListItem)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,AccountId,DateAdded,Cost,Description,WebAddress,PurchasedTag")] WishListItem wishListItem)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(wishListItem).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);
@@ -95,13 +96,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: WishListItems/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            WishListItem wishListItem = db.WishListItems.Find(id);
+            WishListItem wishListItem = await db.WishListItems.FindAsync(id);
             if (wishListItem == null)
             {
                 return HttpNotFound();
@@ -112,11 +113,11 @@ namespace Parents_Bank.Controllers
         // POST: WishListItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            WishListItem wishListItem = db.WishListItems.Find(id);
+            WishListItem wishListItem = await db.WishListItems.FindAsync(id);
             db.WishListItems.Remove(wishListItem);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

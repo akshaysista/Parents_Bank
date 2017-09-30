@@ -11,10 +11,8 @@ namespace Parents_Bank.Models
     [CustomValidation(typeof(Transaction), "ValidateTransactionDate")]
     public class Transaction
     {
-        [Key]
         public int Id { get; set; }
         public virtual int AccountId { get; set; }
-        [Required]
         public virtual BankAccount Account { get; set; }
         public DateTime TransactionDate { get; set; }
         [Required]
@@ -22,13 +20,13 @@ namespace Parents_Bank.Models
         [Required]
         public string Note { get; set; }
 
-        public ValidationResult ValidateTransactionAmount(Transaction transaction, BankAccount bankAccount, ValidationContext context)
+        public static ValidationResult ValidateTransactionAmount(Transaction transaction, BankAccount bankAccount, ValidationContext context)
         {
             if(transaction==null||bankAccount==null)
                 return  ValidationResult.Success;
-            if(Amount>bankAccount.Balance)
+            if(transaction.Amount>bankAccount.Balance)
                 return  new ValidationResult("A debit cannot be for more that the current account balance");
-            if (Amount>0)
+            if (transaction.Amount>0)
                 return ValidationResult.Success;
            else
            {
@@ -36,11 +34,11 @@ namespace Parents_Bank.Models
            }
         }
 
-        public ValidationResult ValidateTransactionDate(Transaction transaction, ValidationContext context)
+        public static ValidationResult ValidateTransactionDate(Transaction transaction, ValidationContext context)
         {
-            if(TransactionDate>DateTime.Now)
+            if(transaction.TransactionDate>DateTime.Now)
                 return new ValidationResult("The transaction date cannot be in the future");
-            if(TransactionDate.Year<DateTime.Now.Year)
+            if(transaction.TransactionDate.Year<DateTime.Now.Year)
                 return new ValidationResult("The transaction date cannot be before the current year");
             return ValidationResult.Success;
         }
