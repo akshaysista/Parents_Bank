@@ -7,8 +7,8 @@ using System.Web;
 
 namespace Parents_Bank.Models
 {
-    [CustomValidation(typeof(Transaction), "ValidateTransactionAmount")]
-    [CustomValidation(typeof(Transaction), "ValidateTransactionDate")]
+    //[CustomValidation(typeof(Transaction), "ValidateTransactionAmount")]
+    //[CustomValidation(typeof(Transaction), "ValidateTransactionDate")]
     public class Transaction
     {
         public int Id { get; set; }
@@ -24,8 +24,6 @@ namespace Parents_Bank.Models
         {
             if(transaction==null||bankAccount==null)
                 return  ValidationResult.Success;
-            if(transaction.Amount>bankAccount.Balance)
-                return  new ValidationResult("A debit cannot be for more that the current account balance");
             if (transaction.Amount>0)
                 return ValidationResult.Success;
            else

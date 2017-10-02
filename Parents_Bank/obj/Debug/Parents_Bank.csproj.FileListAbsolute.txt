@@ -238,7 +238,7 @@ C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.A
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.Web.xml
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csprojResolveAssemblyReference.cache
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csproj.CoreCompileInputs.cache
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.pdb
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csprojResolveAssemblyReference.cache

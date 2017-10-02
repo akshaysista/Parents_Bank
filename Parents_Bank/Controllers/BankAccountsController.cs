@@ -11,6 +11,7 @@ using Parents_Bank.Models;
 
 namespace Parents_Bank.Controllers
 {
+    [Authorize]
     public class BankAccountsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -47,8 +48,14 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,Balance,InterestRate")] BankAccount bankAccount)
+        public async Task<ActionResult> Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
         {
+            if(db.BankAccounts.Count(x=>x.OwnerEmail==bankAccount.RecipientEmail)>0)
+                ModelState.AddModelError("RecipientEmail", "An owner cannot be a recipient of another account");
+            if (db.BankAccounts.Count(x => x.RecipientEmail == bankAccount.OwnerEmail) > 0)
+                ModelState.AddModelError("OwnerEmail", "A recipient cannot be an owner of another account");
+            if (db.BankAccounts.Count(x => x.RecipientEmail == bankAccount.RecipientEmail) > 0)
+                ModelState.AddModelError("RecipientEmail", "A recipient user can only have 1 recipient account");
             if (ModelState.IsValid)
             {
                 db.BankAccounts.Add(bankAccount);
@@ -79,7 +86,7 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,Balance,InterestRate")] BankAccount bankAccount)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
@@ -110,10 +117,25 @@ namespace Parents_Bank.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
-            db.BankAccounts.Remove(bankAccount);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            List<Transaction> transactions = db.BankAccounts.First(x => x.Id == id).Transactions;
+            decimal balance = 0;
+            foreach (var item in transactions)
+            {
+                balance += item.Amount;
+            }
+            if (balance <= 0)
+            {
+                ModelState.AddModelError("","An account cannot be deleted if there is a balance on the account");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
+                db.BankAccounts.Remove(bankAccount);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

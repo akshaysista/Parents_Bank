@@ -15,6 +15,7 @@ namespace Parents_Bank.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        ApplicationDbContext _db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -79,7 +80,12 @@ namespace Parents_Bank.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (_db.BankAccounts.Any(x => x.RecipientEmail == model.Email))
+                        return RedirectToAction("Details", "BankAccounts");
+                    else
+                    {
+                        return RedirectToAction("Index", "BankAccounts");
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

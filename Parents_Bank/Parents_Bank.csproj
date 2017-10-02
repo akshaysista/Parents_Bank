@@ -314,7 +314,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\BankAccounts\Create.cshtml" />
     <Content Include="Views\BankAccounts\Delete.cshtml" />
-    <Content Include="Views\BankAccounts\Details.cshtml" />
     <Content Include="Views\BankAccounts\Edit.cshtml" />
     <Content Include="Views\BankAccounts\Index.cshtml" />
     <Content Include="Views\Transactions\Create.cshtml" />
@@ -327,6 +326,7 @@
     <Content Include="Views\WishListItems\Details.cshtml" />
     <Content Include="Views\WishListItems\Edit.cshtml" />
     <Content Include="Views\WishListItems\Index.cshtml" />
+    <Content Include="Views\BankAccounts\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,6 +11,7 @@ using Parents_Bank.Models;
 
 namespace Parents_Bank.Controllers
 {
+    [Authorize]
     public class WishListItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
