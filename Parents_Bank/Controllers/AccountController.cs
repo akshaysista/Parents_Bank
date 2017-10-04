@@ -81,7 +81,7 @@ namespace Parents_Bank.Controllers
             {
                 case SignInStatus.Success:
                     if (_db.BankAccounts.Any(x => x.RecipientEmail == model.Email))
-                        return RedirectToAction("Details", "BankAccounts");
+                        return RedirectToAction("Details", "BankAccounts", new { @id = _db.BankAccounts.First(x=>x.RecipientEmail==model.Email).Id });
                     else
                     {
                         return RedirectToAction("Index", "BankAccounts");

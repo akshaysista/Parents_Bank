@@ -1,3 +1,10 @@
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.IO.Compression.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\VBCSCompiler.exe
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csproj.CoreCompileInputs.cache
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\ApplicationInsights.config
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\csc.exe
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\csc.exe.config
@@ -6,13 +13,9 @@ C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\csi.
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\csi.exe.config
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\csi.rsp
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.CSharp.Core.targets
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.VisualBasic.Core.targets
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Microsoft.Win32.Primitives.dll
@@ -22,7 +25,6 @@ C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Syst
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.Diagnostics.Process.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.Diagnostics.StackTrace.dll
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.IO.Compression.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.IO.FileSystem.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.IO.FileSystem.DriveInfo.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\System.IO.FileSystem.Primitives.dll
@@ -45,11 +47,7 @@ C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\Syst
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\vbc.exe
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\vbc.exe.config
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\vbc.rsp
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\VBCSCompiler.exe
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\roslyn\VBCSCompiler.exe.config
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.dll.config
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.dll
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.pdb
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.Win32.Primitives.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\netstandard.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\System.AppContext.dll
@@ -238,7 +236,9 @@ C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.A
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Microsoft.AI.Web.xml
-C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csproj.CoreCompileInputs.cache
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.dll
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.pdb
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.dll.config
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.dll
+C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\bin\Parents_Bank.pdb
 C:\Users\Akshay\Documents\Bank Project\Parents_Bank\Parents_Bank\obj\Debug\Parents_Bank.csprojResolveAssemblyReference.cache

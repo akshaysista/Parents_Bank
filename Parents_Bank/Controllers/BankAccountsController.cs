@@ -17,19 +17,19 @@ namespace Parents_Bank.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BankAccounts
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await db.BankAccounts.ToListAsync());
+            return View(db.BankAccounts.ToList());
         }
 
         // GET: BankAccounts/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
+            BankAccount bankAccount = db.BankAccounts.Find(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -48,7 +48,7 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
+        public ActionResult Create([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
         {
             if(db.BankAccounts.Count(x=>x.OwnerEmail==bankAccount.RecipientEmail)>0)
                 ModelState.AddModelError("RecipientEmail", "An owner cannot be a recipient of another account");
@@ -59,7 +59,7 @@ namespace Parents_Bank.Controllers
             if (ModelState.IsValid)
             {
                 db.BankAccounts.Add(bankAccount);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -67,13 +67,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: BankAccounts/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
+            BankAccount bankAccount = db.BankAccounts.Find(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -86,25 +86,25 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "Id,OwnerEmail,RecipientEmail,Name,OpenDate,InterestRate")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(bankAccount).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(bankAccount);
         }
 
         // GET: BankAccounts/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
+            BankAccount bankAccount = db.BankAccounts.Find(id);
             if (bankAccount == null)
             {
                 return HttpNotFound();
@@ -115,26 +115,26 @@ namespace Parents_Bank.Controllers
         // POST: BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            List<Transaction> transactions = db.BankAccounts.First(x => x.Id == id).Transactions;
-            decimal balance = 0;
-            foreach (var item in transactions)
-            {
-                balance += item.Amount;
-            }
-            if (balance <= 0)
-            {
-                ModelState.AddModelError("","An account cannot be deleted if there is a balance on the account");
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                BankAccount bankAccount = await db.BankAccounts.FindAsync(id);
+            //List<Transaction> transactions = db.BankAccounts.First(x => x.Id == id).Transactions;
+            //decimal balance = 0;
+            //foreach (var item in transactions)
+            //{
+            //    balance += item.Amount;
+            //}
+            //if (balance >= 0)
+            //{
+            //    ModelState.AddModelError("","An account cannot be deleted if there is a balance on the account");
+            //    return RedirectToAction("Index");
+            //}
+            
+            
+                BankAccount bankAccount = db.BankAccounts.Find(id);
                 db.BankAccounts.Remove(bankAccount);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            }
+            
             
         }
 

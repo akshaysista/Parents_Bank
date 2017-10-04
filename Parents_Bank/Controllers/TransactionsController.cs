@@ -17,20 +17,20 @@ namespace Parents_Bank.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Transactions
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var transactions = db.Transactions.Include(t => t.Account);
-            return View(await transactions.ToListAsync());
+            return View(transactions.ToList());
         }
 
         // GET: Transactions/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -50,13 +50,13 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,AccountId,TransactionDate,Amount,Note")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "Id,AccountId,TransactionDate,Amount,Note")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
                 db.Transactions.Add(transaction);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                db.SaveChanges();
+                return RedirectToAction("Details","BankAccounts");
             }
 
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
@@ -64,13 +64,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: Transactions/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -84,12 +84,12 @@ namespace Parents_Bank.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,AccountId,TransactionDate,Amount,Note")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "Id,AccountId,TransactionDate,Amount,Note")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(transaction).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
@@ -97,13 +97,13 @@ namespace Parents_Bank.Controllers
         }
 
         // GET: Transactions/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Transaction transaction = await db.Transactions.FindAsync(id);
+            Transaction transaction = db.Transactions.Find(id);
             if (transaction == null)
             {
                 return HttpNotFound();
@@ -114,12 +114,20 @@ namespace Parents_Bank.Controllers
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            Transaction transaction = await db.Transactions.FindAsync(id);
-            db.Transactions.Remove(transaction);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            
+            Transaction transaction = db.Transactions.Find(id);
+            if (transaction != null && transaction.Account.IsOwner(User.Identity.Name))
+            {
+                db.Transactions.Remove(transaction);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
 
         protected override void Dispose(bool disposing)
