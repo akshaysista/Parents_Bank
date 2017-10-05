@@ -12,9 +12,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Account.OwnerEmail)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.DateAdded)
         </th>
         <th>
@@ -34,9 +31,6 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Account.OwnerEmail)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateAdded)
         </td>

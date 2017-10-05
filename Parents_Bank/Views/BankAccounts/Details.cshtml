@@ -53,11 +53,14 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    @if(Model.IsOwner(User.Identity.Name))
+    { 
+        @Html.ActionLink("Edit", "Edit", new {id = Model.Id})
+    }
     <div>
         @{ Html.RenderAction("Index", "Transactions"); }
     </div>
-    <hr />
+    <hr/>
     <div>
         @{ Html.RenderAction("Index", "WishListItems");}
     </div>

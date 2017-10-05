@@ -117,23 +117,22 @@ namespace Parents_Bank.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            //List<Transaction> transactions = db.BankAccounts.First(x => x.Id == id).Transactions;
-            //decimal balance = 0;
-            //foreach (var item in transactions)
-            //{
-            //    balance += item.Amount;
-            //}
-            //if (balance >= 0)
-            //{
-            //    ModelState.AddModelError("","An account cannot be deleted if there is a balance on the account");
-            //    return RedirectToAction("Index");
-            //}
-            
-            
+            BankAccount account= db.BankAccounts.First(x => x.Id == id);
+            if (account.IsOwner(User.Identity.Name))
+            {
+                account.AccountBalance = account.Balance();
+                if (account.AccountBalance > 0 || account.AccountBalance < 0)
+                {
+                    ModelState.AddModelError("", "An account cannot be deleted if there is a balance on the account");
+                    return RedirectToAction("Index");
+                }
+
+
                 BankAccount bankAccount = db.BankAccounts.Find(id);
                 db.BankAccounts.Remove(bankAccount);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
             
             
         }

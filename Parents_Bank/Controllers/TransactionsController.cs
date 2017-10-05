@@ -15,8 +15,12 @@ namespace Parents_Bank.Controllers
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        public ActionResult RedirectDetails(int? id)
+        {
+            return RedirectToAction("Details", "BankAccounts", new { id = id });
+        }
         // GET: Transactions
+
         public ActionResult Index()
         {
             var transactions = db.Transactions.Include(t => t.Account);
@@ -54,9 +58,12 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
+                BankAccount account = db.BankAccounts.First(x => x.OwnerEmail == User.Identity.Name);
+                transaction.AccountId = account.Id;
+                transaction.Account = account;
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
-                return RedirectToAction("Details","BankAccounts");
+                return RedirectToAction("Details","BankAccounts", new { @id = db.BankAccounts.First(x => x.Id == transaction.AccountId).Id });
             }
 
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);

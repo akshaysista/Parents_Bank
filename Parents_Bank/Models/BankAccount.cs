@@ -12,17 +12,32 @@ namespace Parents_Bank.Models
     {
         public int Id { get; set; }
         [EmailAddress(ErrorMessage = "Owner field must be a valid email")]
+        [Display(Name = "Owner Email")]
         public string  OwnerEmail { get; set; }
+        [Display(Name = "Recipient Email")]
         [EmailAddress(ErrorMessage = "Recipient field must be a valid email")]
         public string RecipientEmail { get; set; }
         [Required]
+        [Display(Name = "Name of Recipient")]
         public string Name { get; set; }//Name of child
+        [Display(Name = "Account Open Date")]
         public DateTime OpenDate { get; set; }
-        
+        [Display(Name = "Rate of Interest")]
         public decimal InterestRate { get; set; }
+        [Display(Name = "Account Balance")]
+        public decimal  AccountBalance { set; get; }
         public virtual List<Transaction> Transactions { get; set; }
         public virtual List<WishListItem> WishListItems { get; set; }
 
+        public decimal Balance()
+        {
+            AccountBalance = 0;
+            foreach (var item in Transactions)
+            {
+                AccountBalance += item.Amount;
+            }
+            return AccountBalance;
+        }
         public static ValidationResult ValidateInterestRate(BankAccount bankAccount, ValidationContext context)
         {
             if (bankAccount ==null)
@@ -78,7 +93,7 @@ namespace Parents_Bank.Models
         public bool IsRecipient(string currentUser)
         {
             // HELPER METHOD TO CHECK IF THE USER PASSED IN AS THE ARGUMENT
-            // IS THE ADMINISTRATOR
+            // IS THE RECIPIENT
             if (string.IsNullOrWhiteSpace(currentUser))
             {
                 return false;
@@ -97,7 +112,7 @@ namespace Parents_Bank.Models
         public bool IsOwnerOrRecipient(string currentUser)
         {
             // HELPER METHOD TO CHECK IF THE USER PASSED IN AS THE ARGUMENT
-            // IS THE OWNER OR THE ADMINISTRATOR
+            // IS THE OWNER OR THE RECIPIENT
             return IsOwner(currentUser) || IsRecipient(currentUser);
         }
     }

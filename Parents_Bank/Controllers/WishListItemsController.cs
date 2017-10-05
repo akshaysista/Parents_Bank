@@ -15,7 +15,10 @@ namespace Parents_Bank.Controllers
     public class WishListItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        public ActionResult RedirectDetails(int? id)
+        {
+            return RedirectToAction("Details", "BankAccounts", new { id = id });
+        }
         // GET: WishListItems
         public ActionResult Index()
         {
@@ -54,9 +57,13 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
+                BankAccount account = db.BankAccounts.First(x =>
+                    x.OwnerEmail == User.Identity.Name || x.RecipientEmail == User.Identity.Name);
+                wishListItem.AccountId = account.Id;
+                wishListItem.Account = account;
                 db.WishListItems.Add(wishListItem);
                 db.SaveChanges();
-                return RedirectToAction("Details","BankAccounts");
+                return RedirectToAction("Details","BankAccounts", new { @id = db.BankAccounts.First(x => x.Id == wishListItem.AccountId).Id });
             }
 
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);

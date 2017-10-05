@@ -5,9 +5,12 @@
 }
 
 <h2>Index</h2>
-<p>
-    @Html.ActionLink("Create New Recipient Account", "Create")
-</p>
+@if (Model.Any(x => x.OwnerEmail == User.Identity.Name))
+{
+    <p>
+        @Html.ActionLink("Create New Recipient Account", "Create")
+    </p>
+}
 <table class="table">
     <tr>
         <th>

@@ -14,8 +14,10 @@ namespace Parents_Bank.Models
         public int Id { get; set; }
         public virtual int AccountId { get; set; }
         public virtual BankAccount Account { get; set; }
+        [Display(Name = "Transaction Date")]
         public DateTime TransactionDate { get; set; }
         [Required]
+        [Display(Name = "Transaction Amount")]
         public decimal Amount { get; set; }
         [Required]
         public string Note { get; set; }
