@@ -30,6 +30,10 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount bankAccount = db.BankAccounts.Find(id);
+
+            ViewBag.BalanceAmount = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
+            ViewBag.InterestAmount = Math.Round(bankAccount.InerestAmount()-ViewBag.BalanceAmount,3);
+            
             if (bankAccount == null)
             {
                 return HttpNotFound();

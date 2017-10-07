@@ -13,7 +13,7 @@ namespace Parents_Bank.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult FinancialResource()
         {
             ViewBag.Message = "Your application description page.";
 

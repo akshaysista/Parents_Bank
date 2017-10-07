@@ -38,6 +38,42 @@ namespace Parents_Bank.Models
             }
             return AccountBalance;
         }
+
+        public decimal InerestAmount()
+        {
+
+            
+            var currentDayOfYear = DateTime.Now;
+            
+            var currentYear = DateTime.Now.Year;
+            var startDate = new DateTime(currentYear,1,1);
+            
+
+            var compoundingTimes = 12;
+
+            var numberOfDays = (currentDayOfYear - startDate).Days;
+
+            decimal runningTotal = 0;
+            for (int today = 1; today <= numberOfDays; today++)
+            {
+                var transactionsToday = Transactions.Where(x => x.TransactionDate.Day == today).Sum(x => x.Amount);
+                runningTotal = runningTotal + transactionsToday;
+                decimal timePeriod = 1 / (decimal)numberOfDays;
+                if (runningTotal > 0)
+                {
+                    var principleAmount =
+                        GetDayInterest(runningTotal, InterestRate / 100, compoundingTimes, timePeriod);
+                    runningTotal = principleAmount;
+                }
+            }
+
+            return runningTotal;
+        }
+        private decimal GetDayInterest(decimal runningTotal, decimal interestRate, int compoundingTimes, decimal timePeriod)
+        {
+            var r_n_ratio = interestRate / compoundingTimes;
+            return runningTotal * Convert.ToDecimal(Math.Pow(1 + (double)r_n_ratio, (double)timePeriod));
+        }
         public static ValidationResult ValidateInterestRate(BankAccount bankAccount, ValidationContext context)
         {
             if (bankAccount ==null)

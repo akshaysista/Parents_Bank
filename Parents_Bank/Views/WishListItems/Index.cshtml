@@ -3,55 +3,56 @@
 @{
     ViewBag.Title = "Index";
 }
+<style>
+    .tileFormat {
+      
+    }
+</style>
 
 <h2>Wishlist Items</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cost)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WebAddress)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PurchasedTag)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateAdded)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cost)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.WebAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PurchasedTag)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+ <div class="container">
+@foreach (var item in Model)
+
+
+{
+    <div class="tile col-lg-2" style="margin:20px; border:outset; height:250px;width:250px">
+        <div class="tileFormat" style="position:absolute;top:0;margin-left:30%">
+            <h3>@item.Description</h3>
+        </div>
+        <div style="margin-top:20%">
+            <h5 class="col-lg-6"><Strong>Cost: </Strong></h5><h5 class="col-lg-6">@item.Cost</h5>
+        </div>
+        <div>
+            <h5 class="col-lg-6"><Strong>Created: </Strong></h5><h5 class="col-lg-6">@item.DateAdded.ToString("MM/dd/yyyy")</h5>
+        </div>
+        <div class="link" style="width:230px">
+            <h5 class="col-lg-6"><Strong>Url: </Strong></h5><p class="col-lg-6">@item.WebAddress</p>
+            
+        </div>
+        <div style="margin-top:20%">
+            <h5 class="col-lg-6"><Strong>Balance After Purchase: </Strong></h5><h5 class="col-lg-6">@(ViewBag.BalanceAmount - item.Cost)</h5>
+        </div>
+        <div style="margin-bottom:20px;margin-left:45%;margin-right:45%;position:absolute;bottom:15px">
+            @if (Convert.ToBoolean(item.PurchasedTag) == true)
+            {
+             <i class="glyphicon glyphicon-ok"></i>
+            }
+            else
+            {
+                <i class="glyphicon glyphicon-remove"></i>
+            }
+        </div>
+        <div style="margin-left:20%;position:absolute;bottom:5px">@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })</div>
+       
+    </div>
 }
+    </div>
 
-</table>
+

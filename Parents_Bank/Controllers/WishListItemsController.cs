@@ -22,7 +22,10 @@ namespace Parents_Bank.Controllers
         // GET: WishListItems
         public ActionResult Index()
         {
-            var wishListItems = db.WishListItems.Include(w => w.Account);
+            var wishListItems = db.WishListItems.Where(w => w.Account.OwnerEmail==User.Identity.Name && w.Account.RecipientEmail==User.Identity.Name);
+            //var AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
+            //var bankAccount = db.BankAccounts.Find(AccountId);
+            //ViewBag.AccountBalance = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
             return View(wishListItems.ToList());
         }
 
