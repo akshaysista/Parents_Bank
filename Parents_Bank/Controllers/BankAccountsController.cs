@@ -16,10 +16,21 @@ namespace Parents_Bank.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public ActionResult RedirectDetails(int? id)
+        {
+            return RedirectToAction("Details", "BankAccounts", new { id = id });
+        }
         // GET: BankAccounts
         public ActionResult Index()
         {
             return View(db.BankAccounts.ToList());
+        }
+
+        public ActionResult NoAccess()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ViewBag.accId = db.BankAccounts.First(x => x.RecipientEmail == User.Identity.Name).Id;
+            return View();
         }
 
         // GET: BankAccounts/Details/5
@@ -30,9 +41,12 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             BankAccount bankAccount = db.BankAccounts.Find(id);
-
-            ViewBag.BalanceAmount = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
-            ViewBag.InterestAmount = Math.Round(bankAccount.InerestAmount()-ViewBag.BalanceAmount,3);
+            if (bankAccount != null)
+            {
+                ViewBag.BalanceAmount = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
+                ViewBag.InterestAmount = Math.Round(bankAccount.InerestAmount() - ViewBag.BalanceAmount, 3);
+            }
+            
             
             if (bankAccount == null)
             {
@@ -44,6 +58,10 @@ namespace Parents_Bank.Controllers
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "BankAccounts");
+
             return View();
         }
 
@@ -104,6 +122,9 @@ namespace Parents_Bank.Controllers
         // GET: BankAccounts/Delete/5
         public ActionResult Delete(int? id)
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "BankAccounts");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

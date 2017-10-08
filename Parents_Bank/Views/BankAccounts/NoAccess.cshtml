@@ -1,0 +1,12 @@
+﻿@using Parents_Bank.Models
+@model Parents_Bank.Models.BankAccount
+
+@{
+    ViewBag.Title = "NoAccess";
+}
+
+<h2 class="text-danger">You do not have permission to Create or Delete an Account</h2>
+<div>
+    @Html.ActionLink("Back", "RedirectDetails", new {id = ViewBag.accId })
+</div>
+

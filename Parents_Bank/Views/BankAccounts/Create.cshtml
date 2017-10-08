@@ -3,7 +3,10 @@
 @{
     ViewBag.Title = "Create";
 }
-
+@*@if (Model.IsRecipient(User.Identity.Name))
+{
+    Html.RenderAction("NoAccess","BankAccounts");
+}*@
 <h2>Create</h2>
 
 

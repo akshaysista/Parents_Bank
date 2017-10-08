@@ -4,13 +4,11 @@
     ViewBag.Title = "Owner Account";
 }
 
-<h2>Index</h2>
-@if (Model.Any(x => x.OwnerEmail == User.Identity.Name))
-{
+<h2>Accounts List</h2>
     <p>
         @Html.ActionLink("Create New Recipient Account", "Create")
     </p>
-}
+
 <table class="table">
     <tr>
         <th>

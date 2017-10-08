@@ -4,13 +4,10 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Transactions</h2>
-@if (Model.Any(x => x.Account.OwnerEmail == User.Identity.Name))
-{
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
-}
+
 <table class="table">
     <tr>
         <th>

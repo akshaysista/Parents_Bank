@@ -73,10 +73,16 @@
     @if(Model.IsOwner(User.Identity.Name))
     { 
         @Html.ActionLink("Edit", "Edit", new {id = Model.Id})
+        <div>
+            @{ Html.RenderAction("Index", "Transactions"); }
+        </div>
     }
-    <div>
-        @{ Html.RenderAction("Index", "Transactions"); }
-    </div>
+    @if(Model.IsRecipient(User.Identity.Name))
+    {
+        <div>
+            @{ Html.RenderAction("AccountsList", "Transactions"); }
+        </div>
+    }
     <hr/>
     <div>
         @{ Html.RenderAction("Index", "WishListItems");}

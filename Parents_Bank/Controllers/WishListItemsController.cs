@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using Parents_Bank.Models;
 
@@ -22,7 +23,8 @@ namespace Parents_Bank.Controllers
         // GET: WishListItems
         public ActionResult Index()
         {
-            var wishListItems = db.WishListItems.Where(w => w.Account.OwnerEmail==User.Identity.Name && w.Account.RecipientEmail==User.Identity.Name);
+            var wishListItems = db.WishListItems.Include(t => t.Account)
+                .Where(t => t.Account.OwnerEmail == User.Identity.Name || t.Account.RecipientEmail == User.Identity.Name);
             //var AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
             //var bankAccount = db.BankAccounts.Find(AccountId);
             //ViewBag.AccountBalance = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
@@ -37,11 +39,18 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WishListItem wishListItem = db.WishListItems.Find(id);
-            if (wishListItem == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == wishListItem.AccountId);
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(currentUser))
             {
-                return HttpNotFound();
+                if (wishListItem == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(wishListItem);
             }
-            return View(wishListItem);
+            return HttpNotFound();
         }
 
         // GET: WishListItems/Create
@@ -81,12 +90,20 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WishListItem wishListItem = db.WishListItems.Find(id);
-            if (wishListItem == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == wishListItem.AccountId);
+
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(User.Identity.Name))
             {
-                return HttpNotFound();
+             
+                if (wishListItem == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);
+                return View(wishListItem);
             }
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);
-            return View(wishListItem);
+            return HttpNotFound();
         }
 
         // POST: WishListItems/Edit/5
@@ -100,7 +117,7 @@ namespace Parents_Bank.Controllers
             {
                 db.Entry(wishListItem).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("RedirectDetails",new{id=wishListItem.AccountId});
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);
             return View(wishListItem);
@@ -114,11 +131,17 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WishListItem wishListItem = db.WishListItems.Find(id);
-            if (wishListItem == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == wishListItem.AccountId);
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(currentUser))
             {
-                return HttpNotFound();
+                if (wishListItem == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(wishListItem);
             }
-            return View(wishListItem);
+            return HttpNotFound();
         }
 
         // POST: WishListItems/Delete/5
@@ -127,11 +150,11 @@ namespace Parents_Bank.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             WishListItem wishListItem = db.WishListItems.Find(id);
-            if (wishListItem != null && wishListItem.Account.IsOwner(User.Identity.Name))
+            if (wishListItem != null && wishListItem.Account.IsOwnerOrRecipient(User.Identity.Name))
             {
                 db.WishListItems.Remove(wishListItem);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("RedirectDetails",new {id=wishListItem.AccountId});
             }
             else
             {

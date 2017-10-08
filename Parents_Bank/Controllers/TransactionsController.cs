@@ -19,11 +19,25 @@ namespace Parents_Bank.Controllers
         {
             return RedirectToAction("Details", "BankAccounts", new { id = id });
         }
+        public ActionResult NoAccess()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ViewBag.accId = db.BankAccounts.First(x => x.RecipientEmail == User.Identity.Name).Id;
+
+            return View();
+        }
+        public ActionResult AccountsList()
+        {
+            var transactions = db.Transactions.Include(t => t.Account)
+                .Where(t=>t.Account.OwnerEmail==User.Identity.Name||t.Account.RecipientEmail==User.Identity.Name);
+            return View(transactions.ToList());
+        }
         // GET: Transactions
 
         public ActionResult Index()
         {
-            var transactions = db.Transactions.Include(t => t.Account);
+            var transactions = db.Transactions.Include(t => t.Account)
+                .Where(t => t.Account.OwnerEmail == User.Identity.Name || t.Account.RecipientEmail == User.Identity.Name);
             return View(transactions.ToList());
         }
 
@@ -35,16 +49,26 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == transaction.AccountId);
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(currentUser))
             {
-                return HttpNotFound();
+                if (transaction == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(transaction);
             }
-            return View(transaction);
+            return HttpNotFound();
         }
 
         // GET: Transactions/Create
         public ActionResult Create()
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "Transactions");
+
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
             return View();
         }
@@ -73,17 +97,26 @@ namespace Parents_Bank.Controllers
         // GET: Transactions/Edit/5
         public ActionResult Edit(int? id)
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "Transactions");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == transaction.AccountId);
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(currentUser))
             {
-                return HttpNotFound();
+                if (transaction == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
+                return View(transaction);
             }
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
-            return View(transaction);
+            return HttpNotFound();
         }
 
         // POST: Transactions/Edit/5
@@ -97,7 +130,7 @@ namespace Parents_Bank.Controllers
             {
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("RedirectDetails",new {id=transaction.AccountId});
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
             return View(transaction);
@@ -106,16 +139,25 @@ namespace Parents_Bank.Controllers
         // GET: Transactions/Delete/5
         public ActionResult Delete(int? id)
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "Transactions");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
+            BankAccount account = db.BankAccounts.First(x => x.Id == transaction.AccountId);
+            var currentUser = User.Identity.Name;
+            if (account.IsOwnerOrRecipient(currentUser))
             {
-                return HttpNotFound();
+                if (transaction == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(transaction);
             }
-            return View(transaction);
+            return HttpNotFound();
         }
 
         // POST: Transactions/Delete/5
@@ -129,7 +171,7 @@ namespace Parents_Bank.Controllers
             {
                 db.Transactions.Remove(transaction);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("RedirectDetails",new{id=transaction.AccountId});
             }
             else
             {

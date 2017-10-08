@@ -7,8 +7,8 @@ using System.Web;
 
 namespace Parents_Bank.Models
 {
-    //[CustomValidation(typeof(Transaction), "ValidateTransactionAmount")]
-    //[CustomValidation(typeof(Transaction), "ValidateTransactionDate")]
+    [CustomValidation(typeof(Transaction), "ValidateTransactionAmount")]
+    [CustomValidation(typeof(Transaction), "ValidateTransactionDate")]
     public class Transaction
     {
         public int Id { get; set; }
@@ -22,24 +22,25 @@ namespace Parents_Bank.Models
         [Required]
         public string Note { get; set; }
 
-        public static ValidationResult ValidateTransactionAmount(Transaction transaction, BankAccount bankAccount, ValidationContext context)
+        public static ValidationResult ValidateTransactionAmount(Transaction transaction, ValidationContext context)
         {
-            if(transaction==null||bankAccount==null)
-                return  ValidationResult.Success;
-            if (transaction.Amount>0)
-                return ValidationResult.Success;
-           else
-           {
-               return new ValidationResult("A transaction cannot be for a $0.00 amount");
-           }
+            if (transaction != null && transaction.Amount==0)
+            {
+                return new ValidationResult("A transaction cannot be for a $0.00 amount");
+            }
+            return ValidationResult.Success;
         }
 
         public static ValidationResult ValidateTransactionDate(Transaction transaction, ValidationContext context)
         {
-            if(transaction.TransactionDate>DateTime.Now)
-                return new ValidationResult("The transaction date cannot be in the future");
-            if(transaction.TransactionDate.Year<DateTime.Now.Year)
-                return new ValidationResult("The transaction date cannot be before the current year");
+            if (transaction != null)
+            {
+                if (transaction.TransactionDate > DateTime.Now)
+                    return new ValidationResult("The transaction date cannot be in the future");
+                if (transaction.TransactionDate.Year < DateTime.Now.Year)
+                    return new ValidationResult("The transaction date cannot be before the current year");
+                return ValidationResult.Success;
+            }
             return ValidationResult.Success;
         }
 
