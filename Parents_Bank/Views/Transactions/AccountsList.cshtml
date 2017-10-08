@@ -3,8 +3,12 @@
 @{
     ViewBag.Title = "AccountsList";
 }
-
-
+@if(ViewBag.IsOwner==true)
+{
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+}
 <h2>Transactions</h2>
 <table class="table">
     <tr>

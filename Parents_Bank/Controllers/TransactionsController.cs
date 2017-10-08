@@ -15,6 +15,7 @@ namespace Parents_Bank.Controllers
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        public static int _bankAccount;
         public ActionResult RedirectDetails(int? id)
         {
             return RedirectToAction("Details", "BankAccounts", new { id = id });
@@ -26,8 +27,10 @@ namespace Parents_Bank.Controllers
 
             return View();
         }
-        public ActionResult AccountsList(int? id)
+        public ActionResult AccountsList(int id, bool isOwner)
         {
+            _bankAccount = id;
+            ViewBag.IsOwner = isOwner;
             var transactions = db.Transactions.Where(t => t.AccountId == id);
             return View(transactions.ToList());
         }
@@ -81,7 +84,7 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
-                BankAccount account = db.BankAccounts.First(x => x.OwnerEmail == User.Identity.Name);
+                BankAccount account = db.BankAccounts.Find(_bankAccount);
                 transaction.AccountId = account.Id;
                 transaction.Account = account;
                 db.Transactions.Add(transaction);

@@ -3,7 +3,33 @@
 @{
     ViewBag.Title = "Account Details";
 }
+<style type="text/css">
+    .legends {
+        list-style: none;
+        float: right;
+    }
 
+        .legends li {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .legends span {
+            border: 1px solid #ccc;
+            float: left;
+            width: 12px;
+            height: 12px;
+            margin: 2px;
+        }
+        /* your colors */
+        .legends .progress-bar-success {
+            background-color: #00ff00;
+        }
+
+        .legends .progress-bar-warning {
+            background-color: #ff6347;
+        }
+</style> 
 <h2>Bank Account</h2>
 
 <div>
@@ -69,20 +95,28 @@
      <img src = "~/Content/congrats.jpg" />
     }
 </div>
+@{
+    var interestAmount = (ViewBag.InterestAmount / (ViewBag.InterestAmount + ViewBag.BalanceAmount)) * 100;
+    var principalAmount = 100 - interestAmount;
+    <div class="progress progress-striped active">
+        <div class="progress-bar progress-bar-success" role="progressbar" style="width: @(principalAmount+ "%")">
+            @Math.Round(principalAmount, 1)
+        </div>
+        <div class="progress-bar progress-bar-danger" role="progressbar" style="width: @(interestAmount+ "%")">
+            @Math.Round(interestAmount, 1)
+        </div>
+    </div>
+    <ul class="legends">
+        <li><span class="progress-bar-success"></span> Savings</li>
+        <li><span class="progress-bar-warning"></span> Interest</li>
+    </ul>
+} 
 <p>
-    @if(Model.IsOwner(User.Identity.Name))
-    { 
-        @Html.ActionLink("Edit", "Edit", new {id = Model.Id})
+    
         <div>
-            @{ Html.RenderAction("Index", "Transactions"); }
+            @{ Html.RenderAction("AccountsList", "Transactions", new { id = Model.Id, isOwner=Model.IsOwner(User.Identity.Name) }); }
         </div>
-    }
-    @if(Model.IsRecipient(User.Identity.Name))
-    {
-        <div>
-            @{ Html.RenderAction("AccountsList", "Transactions", new { id = Model.Id }); }
-        </div>
-    }
+    
     <hr/>
     <div>
         @{ Html.RenderAction("AccountDetailsWishListItems", "WishListItems", new { id = Model.Id });}
