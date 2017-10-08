@@ -91,10 +91,14 @@ namespace Parents_Bank.Controllers
         // GET: BankAccounts/Edit/5
         public ActionResult Edit(int? id)
         {
+            bool accessCheck = db.BankAccounts.Any(x => x.RecipientEmail == User.Identity.Name);
+            if (accessCheck)
+                return RedirectToAction("NoAccess", "BankAccounts");
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             BankAccount bankAccount = db.BankAccounts.Find(id);
             if (bankAccount == null)
             {

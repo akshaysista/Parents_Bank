@@ -334,6 +334,7 @@
     <Content Include="Views\Transactions\AccountsList.cshtml" />
     <Content Include="Views\BankAccounts\NoAccess.cshtml" />
     <Content Include="Views\Transactions\NoAccess.cshtml" />
+    <Content Include="Views\WishListItems\AccountDetailsWishListItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

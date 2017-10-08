@@ -162,14 +162,18 @@ namespace Parents_Bank.Controllers
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "BankAccounts");
+                    if (_db.BankAccounts.Any(x => x.RecipientEmail == model.Email))
+                        return RedirectToAction("Details", "BankAccounts", new { @id = _db.BankAccounts.First(x => x.RecipientEmail == model.Email).Id });
+                    else
+                    {
+                        return RedirectToAction("Index", "BankAccounts");
+                    }
                 }
                 AddErrors(result);
             }

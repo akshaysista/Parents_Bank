@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Parents_Bank.Models.WishListItem>
+
+@{
+    ViewBag.Title = "AccountDetailsWishListItems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AccountDetailsWishListItems</h2>
+
+<h2>Wishlist Items</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="container">
+    @foreach (var item in Model)
+
+
+    {
+        <div class="tile col-lg-2" style="margin:20px; border:outset; height:270px;width:250px">
+            <div class="tileFormat" style="position:absolute;top:0;margin-left:30%">
+                <h3>@item.Description</h3>
+            </div>
+            <div style="margin-top:20%">
+                <h5 class="col-lg-6"><Strong>Cost: </Strong></h5><h5 class="col-lg-6">@item.Cost</h5>
+            </div>
+            <div>
+                <h5 class="col-lg-6"><Strong>Created: </Strong></h5><h5 class="col-lg-6">@item.DateAdded.ToString("MM/dd/yyyy")</h5>
+            </div>
+            <div class="link" style="width:230px">
+                <h5 class="col-lg-6"><Strong>Url: </Strong></h5><p class="col-lg-6">@item.WebAddress</p>
+
+            </div>
+            <div style="margin-top:20%">
+                <h5 class="col-lg-6"><Strong>Balance After Purchase: </Strong></h5><h5 class="col-lg-6">@(item.Account.Transactions.Sum(x => x.Amount) - (decimal)item.Cost)</h5>
+            </div>
+            <div style="margin-bottom:20px;margin-left:45%;margin-right:45%;position:absolute;bottom:15px">
+                @if (Convert.ToBoolean(item.PurchasedTag) == true)
+                {
+                    <i class="glyphicon glyphicon-ok"></i>
+                }
+                else
+                {
+                    <i class="glyphicon glyphicon-remove"></i>
+                }
+            </div>
+            <div style="margin-left:20%;position:absolute;bottom:5px">
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </div>
+
+    </div>
+    }
+</div>
+

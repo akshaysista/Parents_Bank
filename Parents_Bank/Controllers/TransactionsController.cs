@@ -26,10 +26,9 @@ namespace Parents_Bank.Controllers
 
             return View();
         }
-        public ActionResult AccountsList()
+        public ActionResult AccountsList(int? id)
         {
-            var transactions = db.Transactions.Include(t => t.Account)
-                .Where(t=>t.Account.OwnerEmail==User.Identity.Name||t.Account.RecipientEmail==User.Identity.Name);
+            var transactions = db.Transactions.Where(t => t.AccountId == id);
             return View(transactions.ToList());
         }
         // GET: Transactions

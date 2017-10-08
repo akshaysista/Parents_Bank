@@ -16,6 +16,8 @@ namespace Parents_Bank.Controllers
     public class WishListItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        public static int _bankAccount;
+
         public ActionResult RedirectDetails(int? id)
         {
             return RedirectToAction("Details", "BankAccounts", new { id = id });
@@ -24,10 +26,18 @@ namespace Parents_Bank.Controllers
         public ActionResult Index()
         {
             var wishListItems = db.WishListItems.Include(t => t.Account)
-                .Where(t => t.Account.OwnerEmail == User.Identity.Name || t.Account.RecipientEmail == User.Identity.Name);
-            //var AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
-            //var bankAccount = db.BankAccounts.Find(AccountId);
-            //ViewBag.AccountBalance = Math.Round(bankAccount.Transactions.Sum(x => x.Amount), 4);
+                .Where(t => t.Account.OwnerEmail == User.Identity.Name);
+            
+            return View(wishListItems.ToList());
+        }
+
+        public ActionResult AccountDetailsWishListItems(int id)
+        {
+            _bankAccount = id;
+            var bankAccount = db.BankAccounts.Find(id);
+            var wishListItems = db.WishListItems.Include(t => t.Account)
+                .Where(t => t.Account.RecipientEmail == bankAccount.RecipientEmail);
+            
             return View(wishListItems.ToList());
         }
 
@@ -56,7 +66,6 @@ namespace Parents_Bank.Controllers
         // GET: WishListItems/Create
         public ActionResult Create()
         {
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
             return View();
         }
 
@@ -69,10 +78,9 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
-                BankAccount account = db.BankAccounts.First(x =>
-                    x.OwnerEmail == User.Identity.Name || x.RecipientEmail == User.Identity.Name);
-                wishListItem.AccountId = account.Id;
+                BankAccount account = db.BankAccounts.Find(_bankAccount);
                 wishListItem.Account = account;
+                wishListItem.AccountId = account.Id;
                 db.WishListItems.Add(wishListItem);
                 db.SaveChanges();
                 return RedirectToAction("Details","BankAccounts", new { @id = db.BankAccounts.First(x => x.Id == wishListItem.AccountId).Id });

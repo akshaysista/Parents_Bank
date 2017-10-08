@@ -4,10 +4,10 @@
     ViewBag.Title = "Account Details";
 }
 
-<h2>Details</h2>
+<h2>Bank Account</h2>
 
 <div>
-    <h4>Bank Account</h4>
+   @* <h4>Bank Account</h4>*@
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -80,12 +80,12 @@
     @if(Model.IsRecipient(User.Identity.Name))
     {
         <div>
-            @{ Html.RenderAction("AccountsList", "Transactions"); }
+            @{ Html.RenderAction("AccountsList", "Transactions", new { id = Model.Id }); }
         </div>
     }
     <hr/>
     <div>
-        @{ Html.RenderAction("Index", "WishListItems");}
+        @{ Html.RenderAction("AccountDetailsWishListItems", "WishListItems", new { id = Model.Id });}
     </div>
     @if (Model.IsOwner(User.Identity.Name))
     {
