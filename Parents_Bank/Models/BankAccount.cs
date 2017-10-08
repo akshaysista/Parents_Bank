@@ -11,9 +11,11 @@ namespace Parents_Bank.Models
     public class BankAccount
     {
         public int Id { get; set; }
+        [Required]
         [EmailAddress(ErrorMessage = "Parent email field must be a valid email")]
         [Display(Name = "Parent Email")]
         public string  OwnerEmail { get; set; }
+        [Required]
         [Display(Name = "Child Email")]
         [EmailAddress(ErrorMessage = "Recipient field must be a valid email")]
         public string RecipientEmail { get; set; }
