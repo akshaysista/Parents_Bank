@@ -85,11 +85,14 @@ namespace Parents_Bank.Controllers
             if (ModelState.IsValid)
             {
                 BankAccount account = db.BankAccounts.Find(_bankAccount);
-                var acctBalance = db.Transactions.Where(x => x.AccountId == account.Id).Sum(x => x.Amount);
-                if ((transaction.Amount+acctBalance)<0)
+                if (account.Transactions.Count>0)
                 {
-                   ModelState.AddModelError("Amount", "A Debit Cannot Be For More Than The Current Account Balance");
-                    return View(transaction);
+                    var acctBalance = db.Transactions.Where(x => x.AccountId == account.Id).Sum(x => x.Amount);
+                    if ((transaction.Amount + acctBalance) < 0)
+                    {
+                        ModelState.AddModelError("Amount", "A Debit Cannot Be For More Than The Current Account Balance");
+                        return View(transaction);
+                    } 
                 }
                 transaction.AccountId = account.Id;
                 transaction.Account = account;
