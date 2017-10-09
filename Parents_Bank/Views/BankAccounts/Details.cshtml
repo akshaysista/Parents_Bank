@@ -34,6 +34,15 @@
 
 <div>
    @* <h4>Bank Account</h4>*@
+    <div>
+        <div>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+                <li class="breadcrumb-item">@Html.ActionLink("Account List", "Index", "BankAccounts")</li>
+                <li class="breadcrumb-item active">Account Details</li>
+            </ol>
+        </div>
+</div>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -82,6 +91,13 @@
 
         </dd>
         <dt>
+            Total Amount
+        </dt>
+        <dd>
+            @(ViewBag.BalanceAmount + ViewBag.InterestAmount)
+
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.InterestRate)
         </dt>
 
@@ -96,21 +112,26 @@
     }
 </div>
 @{
-    var interestAmount = (ViewBag.InterestAmount / (ViewBag.InterestAmount + ViewBag.BalanceAmount)) * 100;
-    var principalAmount = 100 - interestAmount;
-    <div class="progress progress-striped active">
-        <div class="progress-bar progress-bar-success" role="progressbar" style="width: @(principalAmount+ "%")">
-            @Math.Round(principalAmount, 1)
+    if (ViewBag.InterestAmount != 0 || ViewBag.BalanceAmount != 0)
+    {
+        var interestAmount = (ViewBag.InterestAmount / (ViewBag.InterestAmount + ViewBag.BalanceAmount)) * 100;
+        var principalAmount = 100 - interestAmount;
+        <div class="progress progress-striped active">
+            <div class="progress-bar progress-bar-success" role="progressbar" style="width: @(principalAmount + "%")">
+                @Math.Round(principalAmount, 1)
+            </div>
+            <div class="progress-bar progress-bar-danger" role="progressbar" style="width: @(interestAmount + "%")">
+                @Math.Round(interestAmount, 1)
+            </div>
         </div>
-        <div class="progress-bar progress-bar-danger" role="progressbar" style="width: @(interestAmount+ "%")">
-            @Math.Round(interestAmount, 1)
-        </div>
-    </div>
-    <ul class="legends">
-        <li><span class="progress-bar-success"></span> Savings</li>
-        <li><span class="progress-bar-warning"></span> Interest</li>
-    </ul>
-} 
+        <ul class="legends">
+            <li><span class="progress-bar-success"></span> Savings</li>
+            <li><span class="progress-bar-warning"></span> Interest</li>
+        </ul>
+    }
+}
+
+
 <p>
     
         <div>

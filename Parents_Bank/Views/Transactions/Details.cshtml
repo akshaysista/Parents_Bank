@@ -5,7 +5,14 @@
 }
 
 <h2>Details</h2>
-
+<div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Account List", "Index", "BankAccounts")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Account Details", "RedirectDetails", new { id = Model.AccountId })</li>
+        <li class="breadcrumb-item active">Transaction Details</li>
+    </ol>
+</div>
 <div>
     <h4>Transaction</h4>
     <hr />
@@ -46,5 +53,5 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "RedirectDetails",new{id=Model.AccountId})
+    @Html.ActionLink("Account Details", "RedirectDetails",new{id=Model.AccountId})
 </p>

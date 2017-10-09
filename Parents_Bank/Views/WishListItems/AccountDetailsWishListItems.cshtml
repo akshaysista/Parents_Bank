@@ -5,9 +5,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>AccountDetailsWishListItems</h2>
-
 <h2>Wishlist Items</h2>
+
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -18,9 +17,13 @@
 
 
     {
+        var accountBalance =  Math.Round(item.Account.InerestAmount(),3);
         <div class="tile col-lg-2" style="margin:20px; border:outset; height:270px;width:250px">
-            <div class="tileFormat" style="position:absolute;top:0;margin-left:30%">
-                <h3>@item.Description</h3>
+            <div class="tileFormat" style="position:absolute;top:0;left:20px;right:20px">
+                <h3>@item.Description @if (accountBalance > (decimal)item.Cost)
+                { <i class="glyphicon glyphicon-thumbs-up"></i> }
+                else
+                { <i class="glyphicon glyphicon-thumbs-down"></i>}</h3>
             </div>
             <div style="margin-top:20%">
                 <h5 class="col-lg-6"><Strong>Cost: </Strong></h5><h5 class="col-lg-6">@item.Cost</h5>
@@ -32,18 +35,49 @@
                 <h5 class="col-lg-6"><Strong>Url: </Strong></h5><p class="col-lg-6">@item.WebAddress</p>
 
             </div>
-            <div style="margin-top:20%">
-                <h5 class="col-lg-6"><Strong>Balance After Purchase: </Strong></h5><h5 class="col-lg-6">@(item.Account.Transactions.Sum(x => x.Amount) - (decimal)item.Cost)</h5>
+            @if (accountBalance > (decimal)item.Cost)
+            {
+            <div style="margin-top:10%">
+                <h5 class="col-lg-6"><Strong>Amount Left: </Strong></h5><h5 class="col-lg-6">@(accountBalance - (decimal)item.Cost)</h5>
             </div>
-            <div style="margin-bottom:20px;margin-left:45%;margin-right:45%;position:absolute;bottom:15px">
-                @if (Convert.ToBoolean(item.PurchasedTag) == true)
+            }
+            else
+            {
+                <div style="margin-top:10%">
+                    <h5 class="col-lg-6"><Strong>Amount Needed: </Strong></h5><h5 class="col-lg-6">@((decimal)item.Cost - accountBalance) 
+                                                                                  <div>
+                                                                                      @{
+                                                                                          var amountNeeded = (decimal)item.Cost - accountBalance;
+                                                                                          if (amountNeeded != 0 || accountBalance != 0)
+                                                                                          {
+                                                                                              var acctBalancePercentage = accountBalance / (decimal)item.Cost * 100;
+                                                                                              var amtNeededPercentage = amountNeeded / (decimal)item.Cost * 100;
+                                                                                              <div class="progress progress-striped active">
+                                                                                                  <div class="progress-bar progress-bar-success" role="progressbar" style="width: @(acctBalancePercentage + "%")">
+                                                                                                      @Math.Round(accountBalance, 2)
+                                                                                                  </div>
+                                                                                                  <div class="progress-bar progress-bar-danger" role="progressbar" style="width: @(amtNeededPercentage + "%")">
+                                                                                                      @Math.Round(amountNeeded, 2)
+                                                                                                  </div>
+                                                                                              </div>
+                                                                                              
+                                                                                          }
+                                                                                      }
+                                                                                  </div>
+                    </h5>
+                    
+                </div>
+                
+            }
+            <div style="margin-bottom:20px;margin-top:10%;position:absolute;bottom:15px">
+                <h5 class="col-lg-6"><Strong>Purchased:</Strong></h5><h5 class="col-lg-6">@if (Convert.ToBoolean(item.PurchasedTag) == true)
                 {
                     <i class="glyphicon glyphicon-ok"></i>
                 }
                 else
                 {
                     <i class="glyphicon glyphicon-remove"></i>
-                }
+                }</h5>
             </div>
             <div style="margin-left:20%;position:absolute;bottom:5px">
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

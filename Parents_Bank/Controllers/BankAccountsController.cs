@@ -23,6 +23,13 @@ namespace Parents_Bank.Controllers
         // GET: BankAccounts
         public ActionResult Index()
         {
+            var acctRecepients = db.BankAccounts.Select(x => x.RecipientEmail);
+            bool isRecipient = acctRecepients.Contains(User.Identity.Name);
+            if (isRecipient)
+            {
+                var bankAccount = db.BankAccounts.First(a => a.RecipientEmail == User.Identity.Name);
+                return RedirectToAction("Details", "BankAccounts", new { id = bankAccount.Id });
+            }
             return View(db.BankAccounts.ToList());
         }
 
@@ -159,6 +166,17 @@ namespace Parents_Bank.Controllers
 
                 BankAccount bankAccount = db.BankAccounts.Find(id);
                 db.BankAccounts.Remove(bankAccount);
+                db.SaveChanges();
+                var transactions = db.Transactions.Where(x=>x.AccountId==id).ToList();
+                foreach (var trans in transactions)
+                {
+                    db.Transactions.Remove(trans); 
+                }
+                var wishList = db.WishListItems.Where(x => x.AccountId == id).ToList();
+                foreach (var item in wishList)
+                {
+                    db.WishListItems.Remove(item);
+                }
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

@@ -86,7 +86,7 @@ namespace Parents_Bank.Models
             {
                 return new ValidationResult("Interest rate cannot be 0% or below");
             }
-            if (bankAccount.InterestRate > 100)
+            if (bankAccount.InterestRate >= 100)
             {
                 return new ValidationResult("Interest rate cannot be 100% or above");
             }

@@ -49,16 +49,14 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             WishListItem wishListItem = db.WishListItems.Find(id);
-            BankAccount account = db.BankAccounts.First(x => x.Id == wishListItem.AccountId);
-            var currentUser = User.Identity.Name;
-            if (account.IsOwnerOrRecipient(currentUser))
+            if (wishListItem != null)
             {
-                if (wishListItem == null)
+                BankAccount account = db.BankAccounts.First(x => x.Id == wishListItem.AccountId);
+                var currentUser = User.Identity.Name;
+                if (account.IsOwnerOrRecipient(currentUser))
                 {
-                    return HttpNotFound();
-                }
-
-                return View(wishListItem);
+                    return View(wishListItem);
+                } 
             }
             return HttpNotFound();
         }
@@ -66,6 +64,7 @@ namespace Parents_Bank.Controllers
         // GET: WishListItems/Create
         public ActionResult Create()
         {
+            ViewBag.AccountId = _bankAccount;
             return View();
         }
 
@@ -123,9 +122,15 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(wishListItem).State = EntityState.Modified;
+                var updateWishList = db.WishListItems.Find(wishListItem.Id);
+                updateWishList.DateAdded = wishListItem.DateAdded;
+                updateWishList.Cost = wishListItem.Cost;
+                updateWishList.Description = wishListItem.Description;
+                updateWishList.WebAddress = wishListItem.WebAddress;
+                updateWishList.PurchasedTag = wishListItem.PurchasedTag;
+                db.Entry(updateWishList).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("RedirectDetails",new{id=wishListItem.AccountId});
+                return RedirectToAction("RedirectDetails",new{id= updateWishList.AccountId});
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", wishListItem.AccountId);
             return View(wishListItem);

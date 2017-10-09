@@ -5,7 +5,14 @@
 }
 
 <h2>Edit</h2>
-
+<div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Account List", "Index", "BankAccounts")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Account Details", "RedirectDetails", new { id = Model.AccountId })</li>
+        <li class="breadcrumb-item active">Edit Wishlist</li>
+    </ol>
+</div>
 
 @using (Html.BeginForm())
 {
@@ -67,9 +74,7 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "RedirectDetails",new{id=Model.AccountId})
-</div>
+<div>@Html.ActionLink("Account Details", "RedirectDetails", new { id = Model.AccountId })</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

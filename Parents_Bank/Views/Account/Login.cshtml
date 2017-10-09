@@ -5,6 +5,12 @@
 }
 
 <h2>@ViewBag.Title.</h2>
+<div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+        <li class="breadcrumb-item active">Log In</li>
+    </ol>
+</div>
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">

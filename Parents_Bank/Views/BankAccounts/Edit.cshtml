@@ -5,7 +5,13 @@
 }
 
 <h2>Edit</h2>
-
+<div>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+        <li class="breadcrumb-item">@Html.ActionLink("Account List", "Index", "BankAccounts")</li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+</div>
 
 @using (Html.BeginForm())
 {

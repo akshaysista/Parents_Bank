@@ -1,7 +1,24 @@
 ﻿@{
     ViewBag.Title = "FinancialResource";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<h2>Financial Resources</h2>
+<div>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">@Html.ActionLink("Home", "Index", "Home")</li>
+    <li class="breadcrumb-item active">Financial Resources</li>
+</ol>
+</div>
+<p>Please refer to the following articles for more information on financial management</p>
+<div>
+    <h3>Parents</h3>
+    <a href="http://windgatewealthmanagement.com/six-ways-to-teach-your-kids-about-saving-money/" target="_blank">http://windgatewealthmanagement.com/six-ways-to-teach-your-kids-about-saving-money</a><br /><br />
+    <a href="https://smartasset.com/investing/how-parents-can-invest-for-their-kids" target="_blank">https://smartasset.com/investing/how-parents-can-invest-for-their-kids</a><br /><br />
+    <a href="http://www.themint.org/parents/invest-in-a-childs-future.html" target="_blank">http://www.themint.org/parents/invest-in-a-childs-future</a><br /><br />
+</div>
+<div>
+    <h3>Children</h3>
+    <a href="http://www.themint.org/kids/saving-tricks.html" target="_blank">http://www.themint.org/kids/saving-tricks</a><br /><br />
+    <a href="http://www.ratecity.com.au/savings-accounts/articles/money-saving-tips-for-children" target="_blank">http://www.ratecity.com.au/savings-accounts/articles/money-saving-tips-for-children</a><br /><br />
+    <a href="https://www.wikihow.com/Save-Money-as-a-Kid" target="_blank">https://www.wikihow.com/Save-Money-as-a-Kid</a><br />
+</div>

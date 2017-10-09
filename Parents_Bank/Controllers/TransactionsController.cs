@@ -31,7 +31,7 @@ namespace Parents_Bank.Controllers
         {
             _bankAccount = id;
             ViewBag.IsOwner = isOwner;
-            var transactions = db.Transactions.Where(t => t.AccountId == id);
+            var transactions = db.Transactions.Where(t => t.AccountId == id).OrderByDescending(t=>t.TransactionDate);
             return View(transactions.ToList());
         }
         // GET: Transactions
@@ -51,15 +51,15 @@ namespace Parents_Bank.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Transaction transaction = db.Transactions.Find(id);
-            BankAccount account = db.BankAccounts.First(x => x.Id == transaction.AccountId);
-            var currentUser = User.Identity.Name;
-            if (account.IsOwnerOrRecipient(currentUser))
+            if (transaction!=null)
             {
-                if (transaction == null)
+                BankAccount account = db.BankAccounts.First(x => x.Id == transaction.AccountId);
+                var currentUser = User.Identity.Name;
+                if (account.IsOwnerOrRecipient(currentUser))
                 {
-                    return HttpNotFound();
-                }
-                return View(transaction);
+                    
+                    return View(transaction);
+                } 
             }
             return HttpNotFound();
         }
@@ -71,7 +71,7 @@ namespace Parents_Bank.Controllers
             if (accessCheck)
                 return RedirectToAction("NoAccess", "Transactions");
 
-            ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail");
+            ViewBag.AccountId = _bankAccount;
             return View();
         }
 
@@ -85,6 +85,12 @@ namespace Parents_Bank.Controllers
             if (ModelState.IsValid)
             {
                 BankAccount account = db.BankAccounts.Find(_bankAccount);
+                var acctBalance = db.Transactions.Where(x => x.AccountId == account.Id).Sum(x => x.Amount);
+                if ((transaction.Amount+acctBalance)<0)
+                {
+                   ModelState.AddModelError("Amount", "A Debit Cannot Be For More Than The Current Account Balance");
+                    return View(transaction);
+                }
                 transaction.AccountId = account.Id;
                 transaction.Account = account;
                 db.Transactions.Add(transaction);
@@ -130,9 +136,13 @@ namespace Parents_Bank.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(transaction).State = EntityState.Modified;
+                var updatedtransaction = db.Transactions.Find(transaction.Id);
+                updatedtransaction.TransactionDate = transaction.TransactionDate;
+                updatedtransaction.Amount=transaction.Amount;
+                updatedtransaction.Note=transaction.Note;
+                db.Entry(updatedtransaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("RedirectDetails",new {id=transaction.AccountId});
+                return RedirectToAction("RedirectDetails",new {id= updatedtransaction.AccountId});
             }
             ViewBag.AccountId = new SelectList(db.BankAccounts, "Id", "OwnerEmail", transaction.AccountId);
             return View(transaction);
